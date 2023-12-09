@@ -1,0 +1,209 @@
+---
+title: "Example Analysis"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Example Analysis}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  out.width = "100%"
+)
+```
+
+
+
+Doctor Who is an extremely long-running British television program. The show was revived in 2005, and has proven very popular since then. "Doctor Who" is a British science fiction television series that first premiered in 1963. The show follows the adventures of the Doctor, a Time Lord from the planet Gallifrey who travels through time and space in the TARDIS, a time machine that looks like a British police box. The Doctor, often accompanied by companions, explores different worlds, encounters a variety of aliens, and seeks to right wrongs and help those in need. One of the show's defining features is the Doctor's ability to regenerate, allowing for different actors to take on the role. "Doctor Who" has become a cultural phenomenon, with a rich history spanning classic and modern eras, and it continues to captivate audiences with its imaginative storytelling and iconic characters.To celebrate this year's 60th anniversary of Doctor Who, the authors of this dataset presented three datasets.
+
+The data this week comes from Wikipedia's [List of Doctor Who episodes](https://en.wikipedia.org/wiki/List_of_Doctor_Who_episodes_(2005%E2%80%93present) via the {datardis} package by Jonathan Kitt. 
+
+
+```{r setup calculate_CI}
+library(TransportAnagh)
+library(tidytuesdayR)
+library(ggplot2)
+library(readr)
+library(purrr)
+
+#install.packages("tidytuesdayR")
+
+ #tuesdata <- tidytuesdayR::tt_load('2023-11-28')
+ # ## OR
+ #tuesdata <- tidytuesdayR::tt_load(2023, week = 39)
+
+#  drwho_episodes <- tuesdata$drwho_episodes
+# drwho_directors <- tuesdata$drwho_directors
+# drwho_writers <- tuesdata$drwho_writers
+
+     # dir.create("data")
+     # 
+     # saveRDS(richmondway, file = "data/richmondway.RDS")
+    
+    #my_data <- readRDS("~Anaghpackage/data/richmondway.RDS")
+
+drwho_episodes <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2023/2023-11-28/drwho_episodes.csv')
+drwho_directors <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2023/2023-11-28/drwho_directors.csv')
+drwho_writers <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2023/2023-11-28/drwho_writers.csv')
+
+     
+    my_data1= drwho_episodes
+    my_data2= drwho_directors
+    my_data3= drwho_writers
+```
+
+```{r Data Visualization}
+
+#read the dataset
+library(dplyr)
+library(lubridate, warn.conflicts = FALSE)
+library(forcats)
+library(tidyr)
+
+# We summarise the data and get a glimpse of the data set using the two functions below respectively.
+summarise(my_data1)
+glimpse(my_data1)
+
+#This functions counts the numbers of unique value corresonding to the dataset, and it helps us understand the presense of any repetitions.
+count(my_data1)
+
+#We use the distinct function to find dstinct value in the data, and convert the data structure to tibble for better operationality.
+my_data_new1=distinct(my_data1)
+my_data_new1=as_tibble(my_data_new1)
+my_data_new1=arrange(my_data_new1)
+
+# We summarise the data and get a glimpse of the data set using the two functions below respectively.
+summarise(my_data2)
+glimpse(my_data2)
+
+#This functions counts the numbers of unique value corresonding to the dataset, and it helps us understand the presense of any repetitions.
+count(my_data2)
+
+#We use the distinct function to find dstinct value in the data, and convert the data structure to tibble for better operationality.
+my_data_new2=distinct(my_data2)
+my_data_new2=as_tibble(my_data_new2)
+my_data_new2=arrange(my_data_new2)
+
+# We summarise the data and get a glimpse of the data set using the two functions below respectively.
+summarise(my_data3)
+glimpse(my_data3)
+
+#This functions counts the numbers of unique value corresonding to the dataset, and it helps us understand the presense of any repetitions.
+count(my_data3)
+
+#We use the distinct function to find dstinct value in the data, and convert the data structure to tibble for better operationality.
+my_data_new3=distinct(my_data3)
+my_data_new3=as_tibble(my_data_new3)
+my_data_new3=arrange(my_data_new3)
+
+#We also find the current time to be able to understand the date till which the analysis is valid. The analysis might not be valid at a future date.
+Sys.timezone()
+
+now(tzone = "America/New_York")
+```
+We now use Purr to simultaneously apply functiosn to vectors.
+```{r purrr}
+library(purrr)
+vec_req <- as.numeric(my_data_new1$rating)
+result <- map_dbl(vec_req, ~(. - min(vec_req)) / (max(vec_req) - min(vec_req)))
+#We scale the ratings to 0,1
+result
+
+#We convert all the uppercase names of the directors to lower case.
+lowercase_words <- map_chr(my_data_new2$director, tolower)
+lowercase_words
+```
+
+We now apply the Optimal Transport maps to find the distance between the ratings in regular and special episodes. 
+```{r optimal}
+library(dplyr)
+library(transport)
+datarate1=as.matrix((my_data_new1%>%filter(my_data_new1$type==unique(my_data_new1$type)[1]))$rating)
+datarate2=as.matrix((my_data_new1%>%filter(my_data_new1$type==unique(my_data_new1$type)[2]))$rating)
+
+num_1=length(datarate1)
+num_2=length(datarate2)
+numc=num_1*num_2
+nums=num_1+num_2
+
+ground_p <- 2
+p <- 1
+w1 <- rep(1/num_1, num_1)
+w2 <- rep(1/num_2, num_2)
+
+cost_matrix_Lp<-function(x,y,ground_p){
+  mat=matrix(0,nrow(x),nrow(y))
+  for(i in 1:nrow(x)){
+    for(j in 1:nrow(y)){
+      mat[i,j]<-(sum((x[i,] - y[j,])^ground_p))^(1/ground_p)
+    }
+  }
+  return(mat)
+}
+costm1=cost_matrix_Lp(datarate1, datarate2, ground_p=2)
+#The transport map is found below
+res <- transport(w1, w2, costm=costm1)
+res
+
+#The wasserstein distance is found below
+wasserstein(a=w1, b=w2, costm=cost_matrix_Lp(datarate1,datarate2,ground_p=2))
+```
+
+We firstly look at the progression of seasons/episodes and correlate it with the duration of the episodes. We can see that there has been an increase as the seasons progressed. However most of the episodes are 45 minutes long.
+```{r plot 1}
+ggplot(my_data_new1, aes(x = production_code, y = duration, group=1)) +
+  geom_point() +  geom_line() +
+  labs(
+    title = "Season-Episode vs Duration",
+    subtitle = "For Doctor Who",
+    caption = "Data source: Tidytuesday"
+  )
+
+```
+
+We also looked at the relationship between the progression of seasons with the ratings of the episode. There is a tendency of episodes to have a similar ratings, but there are periods irrespective of type of episodes, where the ratings have fluctuated a lot.
+
+```{r plot 2}
+
+ggplot(my_data_new1, aes(x = production_code, y = rating, group=1)) +
+  geom_point() +  geom_line() + facet_wrap(~ type)+
+  labs(
+    title = "Season-Episode vs Rating",
+    subtitle = "For Doctor Who",
+    caption = "Data source: Tidytuesday"
+  )
+
+
+```
+
+Finally we look at the effect of type of season on the ratings. It seems that there is not much effect of type of episodes.
+```{r plot 3}
+ggplot(my_data_new1, aes(x = type, y = rating)) +
+  geom_boxplot() +
+  labs(
+    title = "Episode Type vs Rating",
+    subtitle = "For Doctor Who",
+    caption = "Data source: Tidytuesday"
+  )
+
+```
+
+summarise
+glimpse
+count
+distinct
+as_tibble
+arrange
+Sys.timezone
+now
+
+Purrr- map_dbl, map_chr
+
+Transport- transport, Wasserstein
+
+Geom-point, line, boxplot
+
+facet_wrap
