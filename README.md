@@ -18,15 +18,46 @@ This is a basic example which shows you how to solve a common problem:
 
 ```{r example}
 library(TransportAnagh)
-## basic example code
-#
-# example for the default method
-#
-a <- c(100, 200, 80, 150, 50, 140, 170, 30, 10, 70)
-b <- c(60, 120, 150, 110, 40, 90, 160, 120, 70, 80)
-set.seed(24)
-costm <- matrix(sample(1:20, 100, replace=TRUE), 10, 10)
-res <- transport(a,b,costm)
+> ## basic example code
+> #
+> # example for the default method
+> #
+> a <- c(100, 200, 80, 150, 50, 140, 170, 30, 10, 70)
+> b <- c(60, 120, 150, 110, 40, 90, 160, 120, 70, 80)
+> set.seed(24)
+> costm <- matrix(sample(1:20, 100, replace=TRUE), 10, 10); costm
+      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+ [1,]    7   17   12    6    6    9   10   19   17     9
+ [2,]   19    8   11   14    7   17    4    5    7     3
+ [3,]    8   13    5    3    1    1    4   19    4    19
+ [4,]    2    1   18   13   18   17   16   16   11    19
+ [5,]    3    5    1    1    4   15   10   19   12     4
+ [6,]   10   16    5   19   15   20    8   13    2     2
+ [7,]    9   12   20    8    3    3    3    1   18    18
+ [8,]   20    8   11    7   14   15    7    2    2     7
+ [9,]    9   18   14    1    3    7   10   16   20     9
+[10,]    8   17    6   14   20   10   14    2    5     5
+> res <- transport(a,b,costm); res
+   from to mass
+1     1  1   30
+2     1  4   70
+3     2  7  160
+4     2 10   40
+5     3  4   30
+6     3  6   50
+7     4  1   30
+8     4  2  120
+9     5  3   50
+10    6  3   60
+11    6  9   40
+12    6 10   40
+13    7  5   40
+14    7  6   40
+15    7  8   90
+16    8  9   30
+17    9  4   10
+18   10  3   40
+19   10  8   30
 ```
 
 ## Changes to layout
