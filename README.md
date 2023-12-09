@@ -42,6 +42,29 @@ res <- transport(a,b,costm)
  4. The color of the background was also changed using bslib
  5. Footnotes were also added
 
+## Website deployed at 
+
+https://jhu-statprogramming-fall-2023.github.io/biostat777-project3-part1-achatto4/
+
+## List of exported functions
+
+1. transport-package - Solve optimal transport problems. Compute Wasserstein distances (a.k.a. Kantorovitch, Fortet–Mourier, Mallows, Earth Mover’s, or minimal Lp distances), return the corresponding transport plans, and display them graphically. Objects that can be compared include grey-scale images, (weighted) point patterns, and mass vectors.
+2. aha - Solve transportation problem by Aurenhammer–Hoffmann–Aronov Method
+3. all.equal (transport objects) - Methods for judging near equality of objects of class pgrid or pp or wpp
+4. compatible - Test whether two objects of the same class are ‘of similar shape’ so that the function transport can be applied.
+5. matimage - A simple wrapper to the image function with a more convenient syntax for plotting matrices "the right way round" as pixel images
+6. methods - Prints a brief description of a pixel grid or a point pattern.
+7. pgrid - Construct an object of class "pgrid" from a matrix or a higher-dimensional array.
+8. pgrid-object - The class "pgrid" (for pixel grid) represents regular quantizations of measures on (bounded subsets of) Rd. Currently only square quantizations of measures on a rectangles are supported, which in 2-d can be thought of as grey scale images.
+9. plot - Methods for plotting objects of class pgrid, pp and wpp, possibly together with a transference plan
+10. semidiscrete1 - Computes the weight vector of the Apollonius diagram describing the semidiscrete optimal transport plan for the Euclidean distance cost function and the associated Wasserstein distance.
+11. subwasserstein - Samples S elements each of a source and a target measure and computes the Wasserstein distance between the samples. The mean distance out of K tries is returned.
+12. transport - Given two objects a and b that specify distributions of mass and an object that specifies (a way to compute) costs, find the transport plan for going from a to b that minimizes the total cost. 
+13. wasserstein - Given two objects a and b that specify measures in Rd, compute the Wasserstein distance of order p between the objects.
+14. wasserstein1d - Given two vectors a and b, compute the Wasserstein distance of order p between their empirical distributions.
+15. wpp - Construct an object of class "wpp" from a matrix of points and a vector of masses.
+16. wpp-object - The class "wpp" represents discrete measures with positive mass at any of finitely many locations.
+
 
 
 
