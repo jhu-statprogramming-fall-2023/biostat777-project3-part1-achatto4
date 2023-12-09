@@ -4,10 +4,7 @@ template:
   bootswatch: lux
   bslib:
     pkgdown-nav-height: 100px
-    bg: "#202123"
-    fg: "#B8BCC2"
-    primary: "#306cc9"
-
+    
 home:
   sidebar:
     structure: [links, license, community, citation, authors, dev]
