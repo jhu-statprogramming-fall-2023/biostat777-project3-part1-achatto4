@@ -1,0 +1,49 @@
+Package: transport
+Version: 0.14-6
+Date: 2023-12-08
+Title: Computation of Optimal Transport Plans and Wasserstein Distances
+Authors@R: c(person("Dominic", "Schuhmacher", email = "dominic.schuhmacher@mathematik.uni-goettingen.de", role = c("aut","cre")),
+             person("Björn", "Bähre", role = "aut", comment = "aha and power diagrams"),
+             person("Nicolas", "Bonneel", role = "aut", comment = "networkflow"),
+             person("Carsten", "Gottschlich", role = "aut", comment = "simplex and shortlist"),
+             person("Valentin", "Hartmann", role = "aut", comment = "semidiscrete1"),
+             person("Florian", "Heinemann", role = "aut", comment = "transport_track and networkflow integration"),
+             person("Bernhard", "Schmitzer", role = "aut", comment = "shielding"),
+             person("Jörn", "Schrieber", role = "aut", comment = "subsampling"),
+             person("Timo", "Wilm", role = "ctb", comment = "wpp"))
+Maintainer: Dominic Schuhmacher <dominic.schuhmacher@mathematik.uni-goettingen.de>
+Depends: R (>= 3.0.0)
+Imports: grDevices, graphics, methods, stats, Rcpp (>= 0.12.10),
+        data.table, ggplot2, usethis,dplyr, forcats, lubridate, tidyr, stats, tidytuesdayR, rmarkdown, readr, purrr, fs, preferably
+Suggests: animation, ks, testthat, WSGeometry
+LinkingTo: RcppEigen, Rcpp
+Description: The transport package in R specializes in solving optimal transport problems,
+      enabling the computation of Wasserstein distances, also known as Kantorovich, Fortet–Mourier,
+      Mallows, Earth Mover’s, or minimal Lp distances. This package provides functionality to not
+      only calculate Wasserstein distances but also return the associated transport plans.
+      Moreover, it offers graphical tools for visualizing these transport plans.The `transport` 
+      package is versatile in its application, as it allows users to compare
+      a variety of objects, including grey-scale images, weighted point patterns, and mass
+      vectors. This makes it a powerful tool for analyzing and quantifying the dissimilarity
+      between distributions, with broad applications in image analysis, spatial statistics, 
+      and other fields where optimal transport distances provide valuable insights into the 
+      structural relationships between datasets.
+LazyData: yes
+Encoding: UTF-8
+License: GPL (>= 2)
+URL: https://dschuhm1.pages.gwdg.de/software
+RoxygenNote: 7.2.3
+Config/testthat/edition: 3
+NeedsCompilation: yes
+Packaged: 2023-07-01 21:29:57 UTC; schumi
+Author: Dominic Schuhmacher [aut, cre],
+  Björn Bähre [aut] (aha and power diagrams),
+  Nicolas Bonneel [aut] (networkflow),
+  Carsten Gottschlich [aut] (simplex and shortlist),
+  Valentin Hartmann [aut] (semidiscrete1),
+  Florian Heinemann [aut] (transport_track and networkflow integration),
+  Bernhard Schmitzer [aut] (shielding),
+  Jörn Schrieber [aut] (subsampling),
+  Timo Wilm [ctb] (wpp)
+Repository: CRAN
+Date/Publication: 2023-07-02 05:30:02 UTC
